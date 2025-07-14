@@ -1,0 +1,94 @@
+
+# Create policy "API-Firehose"#
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "firehose:PutRecord",
+            "Resource": "*"
+        }
+    ]
+}
+
+----------------------------------------------------------
+
+# Create role "APIGateway-Firehose"#
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": [
+                    "apigateway.amazonaws.com"
+                ]
+            },
+            "Action": [
+                "sts:AssumeRole"
+            ]
+        }
+    ]
+}
+
+----------------------------------------------------------
+
+#Bucket policy#
+
+{
+    "Version": "2012-10-17",
+    "Id": "PolicyID",
+    "Statement": [
+        {
+            "Sid": "StmtID",
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "<Enter the ARN for the Kinesis Firehose IAM role>"
+            },
+            "Action": [
+                "s3:AbortMultipartUpload",
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads",
+                "s3:PutObject",
+                "s3:PutObjectAcl"
+            ],
+            "Resource": [
+                "<Enter the ARN of the S3 bucket>",
+                "<Enter the ARN of the S3 bucket>/*"
+            ]
+        }
+    ]
+}
+
+#application/json#
+
+{
+    "DeliveryStreamName": "<Enter the name of your delivery stream>",
+    "Record": {
+        "Data": "$util.base64Encode($util.escapeJavaScript($input.json('$')).replace('\', ''))"
+    }
+}
+
+#Request Body#
+
+{
+"element_clicked":"entree_1",
+"time_spent":67,
+"source_menu":"restaurant_name",
+"created_at":"2022–09–11 23:00:00"
+}
+
+#Test#
+
+{
+"element_clicked":"entree_1",
+"time_spent":12,
+"source_menu":"restaurant_name",
+"created_at":"2022–09–11 23:00:00"
+}
+
+
